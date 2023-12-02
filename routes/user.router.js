@@ -52,12 +52,11 @@ router.post('/login', async (req, res) => {
 
 });
 
-router.get('/get/:id', async (req, res) => {
+router.get('/get/shop-cart-items/:id', async (req, res) => {
     const user = await User.findById(req.params.id).then(result => {
         if (!result) {
             return res.status(401).send({ message: 'login please' });
         } else {
-            console.log(result.shopcart);
             return res.status(200).send(result.shopcart);
         }
     });
@@ -107,6 +106,33 @@ router.post('/shop/delete', (req, res)=>{
     } else {
         User.updateOne({_id: req.body.id}, {$set: {shopcart: []}}).then((resa) => {console.log(resa)}).catch((error) => {console.log(error)});
     }
-} )
+} );
+
+
+router.post('/orders/create', (req, res) => {
+    const order_info = {
+        products: req.body.product,
+        total_price: req.body.total,
+        delivery_address: req.body.address,
+        payment_method: req.body.payment,
+        payment_by: req.body.payment_ID
+    }
+    console.log(order_info);
+    User.findOneAndUpdate({_id: req.body.id}, { $set: { shopcart:[] }}).then((ans)=>{console.log(ans);});
+    User.findOneAndUpdate({_id: req.body.id}, { $push: { order: order_info } })
+    .then(response => {
+        console.log(response);
+        res.status(200).send(response);
+    }).catch(err => {
+        res.status(500).send({
+            flag:false,
+            message: err
+        });
+    });
+});
+
+router.get('/order-history/id/:id', (req, res) => {
+    User.findById(req.params.id).exec().then((user) => { res.send(user.order) }).catch(err => { res.sendStatus(404) });
+})
 
 module.exports = router;

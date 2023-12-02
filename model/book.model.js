@@ -9,5 +9,8 @@ module.exports = mongoose.model('Book',{
   Pages: Number,
   Language: String,
   author: String,
-  comments: Array
+  comments: Array,
+  outOfStock: Boolean
 });
+
+
