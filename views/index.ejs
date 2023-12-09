@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Store</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        line-height: 1.6;
+      }
+
+      h1 {
+        font-size: 32px;
+        margin-bottom: 20px;
+      }
+
+      h2 {
+        font-size: 24px;
+        margin-top: 30px;
+        margin-bottom: 10px;
+      }
+
+      code {
+        font-size: 16pt;
+        background-color: #f4f4f4;
+        padding: 2px 10px;
+        border-radius: 3px;
+      }
+
+      p {
+        margin-bottom: 15px;
+      }
+
+      footer {
+        margin-top: 50px;
+        border-top: 1px solid #ccc;
+        padding-top: 10px;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      /* Customize more styles as needed */
+    </style>
+  </head>
+  <body>
+    <h1>Welcome to book store API</h1>
+    <h1>Book Store API Documentation</h1>
+
+    <h2>Introduction</h2>
+    <p>
+      This API serves as the backend for a book store application. It manages
+      user authentication, book data, shopping cart, and order operations.
+    </p>
+
+    <h2>Base URL</h2>
+    <p>Base URL: <code>http://localhost:3000</code></p>
+
+    <h2>Authentication</h2>
+    <p>
+      The API offers user registration and login functionalities using bcrypt
+      for password hashing.
+    </p>
+
+    <code>POST /api/user/register</code>
+    <h3>Description:</h3>
+    <p>Register a new user.</p>
+    <h3>Request Body:</h3>
+    <ul>
+      <li><b>username:</b> User's username</li>
+      <li><b>password:</b> User's password</li>
+      <li><b>name:</b> User's name</li>
+    </ul>
+    <h3>Response:</h3>
+    <ul>
+      <li><b>id:</b> User's unique ID</li>
+      <li><b>username:</b> User's username</li>
+      <li><b>name:</b> User's name</li>
+      <li><b>message:</b> Success message</li>
+      <li><b>flag:</b> Indicates registration success (true/false)</li>
+    </ul>
+
+    <code>POST /api/user/login </code>
+    <h3>Description:</h3>
+    <p>Login with registered credentials.</p>
+    <h3>Request Body:</h3>
+    <ul>
+      <li><b>username:</b> User's username</li>
+      <li><b>password:</b> User's password</li>
+    </ul>
+    <h3>Response:</h3>
+    <ul>
+      <li><b>id:</b> User's unique ID</li>
+      <li><b>username:</b> User's username</li>
+      <li><b>name:</b> User's name</li>
+      <li><b>message:</b> Success message</li>
+      <li><b>flag:</b> Indicates registration success (true/false)</li>
+    </ul>
+
+    <h2>Books</h2>
+    <p>The API provides functionalities to manage book details.</p>
+
+    <code>GET /api/books</code>
+    <p><strong>Description:</strong> Get all books.</p>
+    <p><strong>Response:</strong> List of all books.</p>
+
+    <code>POST /api/books/create</code>
+    <p><strong>Description:</strong> Create a new book entry.</p>
+    <p>
+      <strong>Request Body:</strong> Book details: title, author, description,
+      etc.
+    </p>
+    <p><strong>Response:</strong>Success message</p>
+
+    <code>GET /api/books/get/:id</code>
+    <p><strong>Description:</strong> Get book details by ID.</p>
+    <p><strong>Response:</strong> Book details matching the ID.</p>
+
+    <code>GET /api/books/getBy/title/:title</code>
+    <p><strong>Description:</strong> Get book details by title.</p>
+    <p><strong>Response:</strong> Book details matching the title.</p>
+
+    <code>GET /api/books/add-to/out-of-stock/:title</code>
+    <p><strong>Description:</strong> Mark a book as out of stock by title.</p>
+    <p><strong>Response:</strong> Success message</p>
+
+    <code>GET /api/books/comments/get/:id</code>
+    <p><strong>Description:</strong> Get comments for a book by its ID.</p>
+    <p><strong>Response:</strong> List of comments for the book.</p>
+
+    <code>GET /api/books/search/:title</code>
+    <p>
+      <strong>Description:</strong> Search for books by title
+      (case-insensitive).
+    </p>
+    <p><strong>Response:</strong> List of books matching the title search.</p>
+
+    <!-- shopcart -->
+
+    <h2>Shopping Cart</h2>
+
+    <p>The API manages users' shopping cart functionalities.</p>
+
+    <code>GET /api/user/get/shop-cart-items/:id</code>
+    <p>
+      <strong>Description:</strong> Get items in the user's shopping cart by
+      user ID.
+    </p>
+    <p><strong>Response:</strong> List of items in the shopping cart.</p>
+
+    <code>POST /api/user/addshopcart</code>
+    <p>
+      <strong>Description:</strong> Add an item to the user's shopping cart.
+    </p>
+    <p>
+      <strong>Request Body:</strong>
+      <ul>
+        <li><b>id:</b> User ID</li>
+        <li><b>product:</b> Name of the product</li>
+        <li><b>price:</b> Price of the product</li>
+      </ul>
+      
+    </p>
+    <p><strong>Response:</strong> Success message or error message</p>
+
+    <code>POST /api/user/shop/delete</code>
+    <p>
+      <strong>Description:</strong> Remove an item from the user's shopping
+      cart.
+    </p>
+    <p>
+      <strong>Request Body:</strong> <br />
+      <ul>
+        <li><b>id:</b> User ID</li>
+        <li><b>index:</b> Index of the item to remove</li>
+      </ul>
+
+    </p>
+    <p><strong>Response:</strong> Success message or error message</p>
+
+    <h2>Orders</h2>
+
+    <p>The API handles user orders and order history.</p>
+
+    <code>POST /api/user/orders/create</code>
+    <p><strong>Description:</strong> Create an order for a user.</p>
+    <p><strong>Request Body:</strong> 
+        Order information: <b>product</b>, <b>total_price</b>, <b>delivery_address</b>, <b>payment_method</b>, <b>payment_by</b>, etc.
+    </p>
+    <p><strong>Response:</strong> Success message or error message</p>
+
+    <code>GET /api/user/order-history/id/:id</code>
+    <p><strong>Description:</strong> Get order history for a user by ID.</p>
+    <p><strong>Response:</strong> List of orders for the user.</p>
+
+
+    <footer>
+      <p>&copy; 2023 Your Book Store API</p>
+    </footer>
+  </body>
+</html>

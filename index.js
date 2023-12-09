@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const userRoute = require("./routes/user.router.js");
 const bookRoute = require("./routes/books.router.js");
 const cors = require('cors');
+require("dotenv").config();
 
 const app = express();
 const port = 3000;
@@ -12,9 +13,13 @@ app.use(express.json());
 app.use('/api/books', bookRoute);
 app.use('/api/user', userRoute);
 
+app.get('/', (req, res) => {
+    res.render('index.ejs')
+});
 
-mongoose.connect("mongodb+srv://karthirs602:adminkarthi@cluster0.camz86p.mongodb.net/books_store?retryWrites=true&w=majority").then((response) =>{
-    app.listen(port, (req, res) =>{
+
+mongoose.connect(process.env.MONGODB_URI).then((response) => {
+    app.listen(port, (req, res) => {
         console.log("listening on port" + port + " http://localhost:" + port);
     });
 });
