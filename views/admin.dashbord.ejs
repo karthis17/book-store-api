@@ -1,0 +1,63 @@
+<%- include('partials/header.ejs') %> <%- include('partials/nav-bar.ejs') %>
+
+<div class="container py-5">
+  <% books.forEach(book => { %>
+  <div class="accordion accordion-flush" id="accordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button
+          class="accordion-button collapsed"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#flush-<%= book._id %>"
+          aria-expanded="false"
+          aria-controls="flush-<%= book._id %>"
+        >
+          <%= book.title %>
+        </button>
+      </h2>
+      <div
+        id="flush-<%= book._id %>"
+        class="accordion-collapse collapse"
+        data-bs-parent="#accordionFlushExample"
+      >
+        <div class="accordion-body d">
+          <h3>Images link</h3>
+          <ul class="list-group my-4 position-relative">
+            <% book['images'].forEach(img => { %>
+            <li class="list-group-item d-flex justify-content-between">
+              <%= img %>
+              <a href="/admin/login/delete/<%= book._id %>"
+                ><i class="bi bi-trash-fill me-2" style="color: red"></i
+              ></a>
+            </li>
+            <% }) %>
+            <li style="list-style: none">
+              <form
+                action="/admin/login/add/image/<%= book._id  %>"
+                method="post"
+              >
+                <input
+                  type="text"
+                  name="image"
+                  class="form-control"
+                  placeholder="Add new image"
+                />
+                <button class="add"><i class="bi bi-send-plus"></i></button>
+              </form>
+            </li>
+          </ul>
+          <a class="btn btn-success" href="/admin/edit/<%= book._id %>"
+            ><i class="bi bi-pencil-square me-2"></i>Edit</a
+          >
+          <a class="btn btn-danger" href="/admin/book/delete/<%= book._id %>"
+            ><i class="bi bi-trash-fill me-2"></i>Delete</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <% }) %>
+</div>
+
+<%- include('partials/footer.ejs') %>

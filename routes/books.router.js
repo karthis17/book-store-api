@@ -1,97 +1,101 @@
 const router = require('express').Router();
-const book = require('../model/book.model.js');
+const controller = require('../controller/book.controller.js');
 
-router.get('/', (req, res) => {
-    book.find().then(result => { res.send(result) }).catch(err => { res.sendStatus(404) });
+router.get('/', async (req, res) => {
+    try {
+        const books = await controller.getAllBooks();
+        res.status(200).send(books);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ message: 'Internal Server Error' });
+    }
 });
 
-router.post('/create', (req, res) => {
-    book.create(req.body).then((result) => { res.status(200).send({ message: "book details add successfully." }) }).catch(err => { res.status(400).send({ message: "book details not added" }) });
+router.post('/create', async (req, res) => {
+    try {
+        await controller.addBook(req.body);
+        res.status(201).send({
+            flag: true,
+            message: 'Book added successfully'
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({
+            flag: false,
+            message: 'Internal Server Error'
+        });
+    }
 });
 
-router.get('/get/:id', (req, res) => {
-    book.findById(req.params.id)
-        .exec().then((book) => { res.send(book) }).catch(err => { res.sendStatus(404) });
+router.get('/get/:id', async (req, res) => {
+    try {
+        const result = await controller.getBookByIdOrTitle(req.params.id);
+        res.status(200).send(result);
+    } catch (err) {
+        res.status(400).send({ message: err.message });
+    }
 });
 
 router.get('/getBy/title/:title', async (req, res) => {
     try {
-        let book = await book.findOne({ title: req.params.title });
-        res.send(book);
+        const result = await controller.getBookByIdOrTitle(req.params.title);
+        res.status(200).send(result);
     } catch (err) {
-        res.status(404).send({
-            success: false,
-            message: err.message
-        })
+        res.status(400).send({ message: err });
     }
 });
 
-router.get('/add-to/out-of-stock/:title', async (req, res) => {
-    //in post request need to send list of book name
+router.get('/purchases/:title', async (req, res) => {
     try {
-        let book_name = req.params.title;
-        console.log(book_name);
-        await book.findOneAndUpdate({ title: book_name }, { $set: { outOfStock: true } })
+        await controller.bookPurchases(req.params.title);
         res.status(200).send({
+            message: 'Success!',
             flag: true,
-            message: "successfully"
         });
     } catch (err) {
-        console.log(err);
+        console.error(err);
+        res.status(400).send({ message: err, flag: false });
+    }
+});
+
+router.post('/comments/add', async (req, res) => {
+    try {
+        await controller.addComment(req.body.id, req.body.comment, req.body.name);
+        res.status(201).send({
+            flag: true,
+            message: 'Comment added successfully'
+        });
+    } catch (err) {
+        console.error(err);
         res.status(500).send({
             flag: false,
-            message: err
+            message: 'Internal Server Error'
         });
     }
-})
-
-router.post('/comments/add', (req, res) => {
-    const comment_o = {
-        name: req.body.name,
-        comment: req.body.comment
-    }
-    console.log(comment_o);
-    book.findOneAndUpdate({ _id: req.body.id }, { $push: { comments: comment_o } })
-        .then(response => {
-            res.status(200).send({
-                flag: true,
-                message: "comment added successfully"
-            });
-        }).catch(err => {
-            console.log(err);
-            res.status(500).send({
-                flag: false,
-                message: err
-            });
-        });
 });
 
 router.get('/comments/get/:id', async (req, res) => {
     try {
-        let id = req.params.id;
-        let comment = await book.findById(id, { comments: 1, _id: 0 });
-        console.log(comment);
-        res.status(200).send(comment);
+        const comments = await controller.getComments(req.params.id);
+        res.status(202).send(comments);
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(500).send({
             flag: false,
-            message: err
+            message: 'Internal Server Error'
         });
     }
 });
 
 router.get('/search/:title', async (req, res) => {
     try {
-        let book_name = req.params.title;
-        let search_book = await book.find({ title: { $regex: book_name, $options: 'i' } }, { title: 1 }).sort({ title: 1 });
-        console.log(search_book);
-        res.status(200).send({ data: search_book });
+        const titles = await controller.searchBook(req.params.title);
+        res.status(200).send({ data: titles });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(500).send({
             flag: false,
-            message: err
+            message: 'Internal Server Error'
         });
     }
 });

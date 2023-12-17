@@ -1,0 +1,26 @@
+<%- include('partials/header.ejs') %>
+    <div class="container h-100">
+      <div class="row my-5"></div>
+      <div class="row my-5">
+        <div class="col-lg-5 mx-auto">
+          <div class="card p-5" style="background-color: rgb(240, 246, 250);">
+            <h2 class="text-center mb-3">ADMIN</h2>
+            <form action="/admin/login" method="post">
+              <div class="mb-3">
+                <label for="InputEmail1" class="form-label">Admin ID</label>
+                <input type="email" class="form-control" id="InputEmail1" aria-describedby="emailHelp" name="username">
+              </div>
+              <div class="mb-3">
+                <label for="InputPassword1" class="form-label">Password</label>
+                <input type="password" class="form-control" id="InputPassword1" name="password">
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <% if (isWrong) { %>
+             <p style="color: red;" class="mt-2">Wrong credential</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+<%- include('partials/footer.ejs') %>

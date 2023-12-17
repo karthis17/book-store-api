@@ -1,0 +1,126 @@
+<%- include('partials/header.ejs') %>
+
+<div class="container h-100">
+  <div class="row my-5">
+    <div class="col-lg-6 mx-auto">
+      <div class="card p-5" style="background-color: rgb(240, 246, 250)">
+        <h2 class="text-center mb-3">ADMIN</h2>
+        <form action="/admin/edit" method="post">
+          <div class="mb-3">
+            <% if (!add) { %>
+
+            <input
+              type="text"
+              class="form-control user-select-none bg-body-secondary"
+              name="id"
+              value="<%= add? '': data._id %>"
+              readonly
+            />
+            <% } %>
+          </div>
+          <div class="mb-3">
+            <label for="Inputtitle" class="form-label">Title</label>
+            <input
+              type="text"
+              class="form-control"
+              id="Inputtitle"
+              name="title"
+              value="<%= add? '': data.title %>"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="author" class="form-label">Author name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="author"
+              name="author"
+              value="<%= add? '': data.author %>"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="page" class="form-label">Pages</label>
+            <input
+              type="number"
+              class="form-control"
+              id="page"
+              name="Pages"
+              value="<%= add? '': data.Pages %>"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="Language" class="form-label">Language</label>
+            <input
+              type="text"
+              class="form-control"
+              id="Language"
+              name="Language"
+              value="<%= add? '': data.Language %>"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="copy" class="form-label">Available Copies</label>
+            <input
+              type="number"
+              class="form-control"
+              id="copy"
+              name="available_copies"
+              value="<%= add? '': data.available_copies %>"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="rate" class="form-label">Rate</label>
+            <input
+              type="number"
+              class="form-control"
+              id="rate"
+              name="rate"
+              value="<%= add? '': data.rate %>"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="image"> Images </label>
+            <div id="images">
+              <% if (!add) { %> <% data['images'].forEach(url => { %>
+              <input
+                type="text"
+                class="form-control"
+                value="<%= url  %>"
+                name="images[]"
+              />
+              <% }) %> <% } %>
+              <input
+                type="text"
+                class="form-control"
+                name="images[]"
+                placeholder="Image URL"
+              />
+            </div>
+            <a class="btn btn-success" id="add">Add Image</a>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById("add").addEventListener("click", () => {
+    const imageField = document.getElementById("images");
+    const text = document.createElement("input");
+    text.type = "text";
+    text.name = "images[]";
+    text.className = "form-control";
+    text.placeholder = "Image URL";
+
+    imageField.appendChild(text);
+  });
+</script>
+<%- include('partials/footer.ejs') %>

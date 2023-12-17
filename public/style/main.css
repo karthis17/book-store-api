@@ -1,0 +1,9 @@
+.add {
+    position: absolute;
+    bottom: 7px;
+    right: 20px;
+    background-color: transparent;
+    border: none;
+    font-weight: 700;
+    color:green;
+}
